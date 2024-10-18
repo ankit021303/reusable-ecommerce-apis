@@ -2,6 +2,15 @@ import express from "express";
 import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import cors from "cors";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+// Middlewares
+// import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
+
+// Routes
+import authRoute from "./src/routes/adminAuthRoutes/auth.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -15,6 +24,14 @@ app.use(bodyParser.json());
 
 const port  = process.env.PORT || 5001;
 
+// For Ditectory Path
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Streaming the logs to the file
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {
+  flags: "a",
+})
+
 app.use(express.json());
 
 app.use(cors());
@@ -26,8 +43,11 @@ app.get("/", (req, res) => {
     res.json("Helloooo MEDIC");
 });
 
+// ADMIN AUTH Routes
+app.use("/api/admin/auth", authRoute );
+
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`App is running on port http://localhost:${port}`);
 });
 
 export default connection;

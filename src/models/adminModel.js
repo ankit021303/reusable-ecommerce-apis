@@ -33,7 +33,7 @@ const adminSchema = sequelize.define(
     role: {
       type: DataTypes.ENUM("admin", "manager", "distributor", "client"),
       allowNull: false,
-      defaultValue: "client", // Assuming "client" is the default role
+      defaultValue: "admin", // Assuming "admin" is the default role
     },
     otp: {
       type: DataTypes.STRING,
