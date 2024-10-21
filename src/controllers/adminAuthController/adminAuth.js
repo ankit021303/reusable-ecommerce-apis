@@ -83,7 +83,7 @@ export const loginAdmin = async (req, res) => {
     // Checking the existence of emails in Admin Table.
     const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
-      return res.status(404).json({ message: "Admin not found." });
+      return res.status(404).json({ message: "User not found." });
     }
 
     // Compare passwords
@@ -116,6 +116,12 @@ export const loginAdmin = async (req, res) => {
       status: true,
       code: 200,
       token,
+      user: {
+        id: admin.id,
+        fullName: admin.fullName,
+        email: admin.email,
+        role: admin.role,
+      },
     });
   } catch (error) {
     console.error("Error during sign-in:", error);

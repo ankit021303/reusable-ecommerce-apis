@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 
 // Routes
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
+import adminManagementRoutes from "./src/routes/adminPanelManagementRoute/adminManagement.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -45,6 +46,8 @@ app.get("/", (req, res) => {
 
 // ADMIN AUTH Routes
 app.use("/api/admin/auth", authRoute );
+// Admin Management Routes
+app.use("/api/admin/members", adminManagementRoutes );
 
 app.listen(port, () => {
     console.log(`App is running on port http://localhost:${port}`);

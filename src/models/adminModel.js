@@ -66,6 +66,20 @@ const adminSchema = sequelize.define(
         is: { args: /^\d{12}$/, msg: "Invalid contact number format" },
       },
     },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        isInt: true,
+      },
+    },
+    updated_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true, // Can be null if the record hasn't been updated yet
+      validate: {
+        isInt: true,
+      },
+    },
   },
   {
     timestamps: true,
