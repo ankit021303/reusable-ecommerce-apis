@@ -85,7 +85,7 @@ export const getAllAdmins = async (req, res) => {
     }
 
     // Fetch all admins from the Admin table with all fields
-    const admins = await Admin.findAll(); // No attributes specified, so it will return all fields
+    const admins = await Admin.findAll();
 
     // Check if any data is found
     if (admins.length === 0) {

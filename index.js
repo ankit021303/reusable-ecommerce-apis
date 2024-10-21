@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from 'body-parser';
+import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 import fs from "fs";
@@ -32,6 +33,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {
   flags: "a",
 })
+
+morgan.token('type', (req, res) => {
+    return req.headers["Content-Type"];
+  });
+  
+  // Initializing Middleware
+  app.use(morgan(":method :url :status :res[content-length] - :response-time ms :date[web]:type,", {
+    stream: accessLogStream,
+  }));
 
 app.use(express.json());
 
