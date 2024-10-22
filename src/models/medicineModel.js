@@ -45,6 +45,10 @@ const Medicine = sequelize.define(
         isAfter: new Date().toString(), // Ensure expiry date should be in the future
       },
     },
+    images: {
+      type: DataTypes.JSON, 
+      allowNull: true,
+    },
     created_by: {
       type: DataTypes.INTEGER,
       allowNull: true,

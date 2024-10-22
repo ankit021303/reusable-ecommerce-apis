@@ -17,19 +17,34 @@ export const addMedicine = async (req, res) => {
         });
     }
 
+    // Check if a medicine with the same name already exists
+    const existingMedicine = await Medicine.findOne({ where: { name } });
+    if (existingMedicine) {
+      return res.status(409).json({
+        message: `Medicine with name "${name}" already exists.`,
+      });
+    }
+
+    // Get the file paths of the uploaded images
+    const imagePaths = req.files.map((file) => file.path);
+
+    // Ensure categories is an array or empty if not provided
+    const categoriesArray = Array.isArray(categories) ? categories : [categories];
+
     const newMedicine = await Medicine.create({
       name,
       description,
       price,
       stockCount,
       expiryDate,
+      images: imagePaths,
       created_by: userId,
       updated_by: userId,
     });
 
     // Find or create categories (categories should be an array of category names)
     const categoryInstances = await Promise.all(
-      categories.map(async (categoryName) => {
+      categoriesArray.map(async (categoryName) => {
         const [category] = await Category.findOrCreate({
           where: { name: categoryName },
         });
@@ -37,15 +52,26 @@ export const addMedicine = async (req, res) => {
       })
     );
 
+
     // Associate the medicine with the found/created categories
     await newMedicine.addCategories(categoryInstances);
 
+    // Fetch the categories associated with the medicine
+    const medicineWithCategories = await Medicine.findByPk(newMedicine.id, {
+      include: [{ model: Category, as: 'categories' }] 
+    });
+
     return res.status(201).json({
       message: "Medicine added successfully with categories.",
-      medicine: newMedicine,
+      medicine: medicineWithCategories,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Server Error", error });
+    console.error("Error during sign-up:", error);
+    return res.status(500).json({ 
+      message: "Internal server error",
+      status: false,
+      code: 500,    
+    });
   }
 };
 
