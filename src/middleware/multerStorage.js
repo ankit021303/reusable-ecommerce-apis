@@ -1,5 +1,5 @@
 import multer from "multer";
-import path from "path";
+// import path from "path";
 
 // Configure multer for image uploads
 const storage = multer.diskStorage({

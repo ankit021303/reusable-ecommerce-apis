@@ -33,6 +33,24 @@ const User = sequelize.define(
         },
       },
     },
+    gender: {
+      type: DataTypes.ENUM("male", "female", "diverse"),
+      allowNull: false,
+      validate: {
+        notNull: { msg: "Gender is required" },
+        isIn: {
+          args: [["male", "female", "diverse"]],
+          msg: "Gender must be male, female, or diverse",
+        },
+      },
+    },
+    dob: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "Date is required" },
+      },
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -49,13 +67,17 @@ const User = sequelize.define(
       defaultValue: "user",
     },
     isActive: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      type: DataTypes.INTEGER,
+      defaultValue: 0, //True Status, ACTIVE
+      allowNull: true,
+      validate: {
+        isIn: [[0, 1]],
+      },
     },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
-    tableName: "users", // Custom table name (optional)
+    timestamps: true, 
+    tableName: "users",
   }
 );
 

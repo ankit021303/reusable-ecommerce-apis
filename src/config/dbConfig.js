@@ -6,6 +6,7 @@ import "../models/userModel.js";
 import "../models/adminModel.js";
 import "../models/medicineModel.js";
 import "../models/categoryModel.js";
+import "../models/reviewModel.js"
 
 dotenv.config();
 // console.log("Check the Latest Code....");

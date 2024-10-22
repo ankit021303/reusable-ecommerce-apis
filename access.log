@@ -28,3 +28,7 @@ POST /api/admin/manage-products/add-medicine 201 652 - 513.160 ms Tue, 22 Oct 20
 POST /api/admin/manage-products/add-medicine 201 635 - 395.987 ms Tue, 22 Oct 2024 10:18:06 GMT-,
 GET /api/admin/manage-products/get-medicines-by-category?categoryName=Fever 200 351 - 133.726 ms Tue, 22 Oct 2024 10:18:36 GMT-,
 GET /api/admin/manage-products/get-medicines-by-category?categoryName=Painkiller 200 760 - 6.540 ms Tue, 22 Oct 2024 10:18:45 GMT-,
+POST /api/admin/auth/master-login 200 537 - 309.746 ms Tue, 22 Oct 2024 10:51:09 GMT-,
+POST /api/admin/auth/master-login 200 530 - 294.210 ms Tue, 22 Oct 2024 10:51:42 GMT-,
+POST /api/user/auth/signup 201 423 - 166.854 ms Tue, 22 Oct 2024 13:08:58 GMT-,
+POST /api/user/auth/login 200 411 - 159.750 ms Tue, 22 Oct 2024 13:10:42 GMT-,

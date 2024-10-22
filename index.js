@@ -8,12 +8,16 @@ import path from "path";
 import { fileURLToPath } from 'url';
 
 // Middlewares
-import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
+// import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
 
 // Routes
+// Admin Panel Routes
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
 import adminManagementRoutes from "./src/routes/adminPanelManagementRoute/adminManagement.js";
 import productManagementRoutes from "./src/routes/productManagementRoutes/product.js";
+
+// Web User Routes
+import userAuthRoute from "./src/routes/userRoutes/userAuth.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -61,6 +65,9 @@ app.use("/api/admin/auth", authRoute );
 app.use("/api/admin/members", adminManagementRoutes );
 // Product(i.e. Medicine) Management Routes
 app.use("/api/admin/manage-products", productManagementRoutes)
+
+// WEB USER AUTH Routes
+app.use("/api/user/auth", userAuthRoute);
 
 app.listen(port, () => {
     console.log(`App is running on port http://localhost:${port}`);
