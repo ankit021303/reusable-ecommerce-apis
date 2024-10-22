@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/sequelize.js";
+import Category from "../models/categoryModel.js";
+import Admin from "../models/adminModel.js";
 
 // Define the Medicine (Product) Model
 const Medicine = sequelize.define(
@@ -43,10 +45,30 @@ const Medicine = sequelize.define(
         isAfter: new Date().toString(), // Ensure expiry date should be in the future
       },
     },
+    created_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Admin,
+        key: "id",
+      },
+    },
+    updated_by: {
+      type: DataTypes.INTEGER,
+      allowNull: true, 
+      references: {
+        model: Admin, 
+        key: "id",
+      },
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// Define Many-to-Many relationship with Category (i.e. Sequelize will automatically create the MedicineCategory table, which will store the mappings between Medicine and Category.)
+Medicine.belongsToMany(Category, { through: "MedicineCategory" });
+Category.belongsToMany(Medicine, { through: "MedicineCategory" });
 
 export default Medicine;

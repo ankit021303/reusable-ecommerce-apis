@@ -8,7 +8,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 
 // Middlewares
-// import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
+import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
 
 // Routes
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
