@@ -13,6 +13,7 @@ import { fileURLToPath } from 'url';
 // Routes
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
 import adminManagementRoutes from "./src/routes/adminPanelManagementRoute/adminManagement.js";
+import productManagementRoutes from "./src/routes/productManagementRoutes/product.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -58,6 +59,8 @@ app.get("/", (req, res) => {
 app.use("/api/admin/auth", authRoute );
 // Admin Management Routes
 app.use("/api/admin/members", adminManagementRoutes );
+// Product(i.e. Medicine) Management Routes
+app.use("/api/admin/manage-products", productManagementRoutes)
 
 app.listen(port, () => {
     console.log(`App is running on port http://localhost:${port}`);

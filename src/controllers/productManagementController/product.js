@@ -1,4 +1,3 @@
-// controllers/medicineController.js
 import Medicine from "../../models/medicineModel.js";
 
 // Create/Add Medicine As trhe product and add it to the Medicine Table (i.e. Product Table)
@@ -23,4 +22,12 @@ export const addMedicine = async (req, res) => {
   }
 };
 
+// To Update the Product(i.e. Medicine)
+export const updateMedicine = async(req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 

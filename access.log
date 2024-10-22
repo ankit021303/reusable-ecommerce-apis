@@ -1,0 +1,2 @@
+POST /api/admin/auth/add-medicine 404 167 - 8.121 ms Tue, 22 Oct 2024 05:58:02 GMT-,
+POST /api/admin/manage-products/add-medicine 201 268 - 77.581 ms Tue, 22 Oct 2024 06:08:32 GMT-,

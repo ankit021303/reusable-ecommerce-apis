@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 // Create Table on Importing the Models and sync the changes to the Table on running the code.
 import "../models/userModel.js";
 import "../models/adminModel.js";
+import "../models/medicineModel.js";
 
 dotenv.config();
 // console.log("Check the Latest Code....");

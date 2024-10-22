@@ -1,4 +1,3 @@
-// models/medicineModel.js
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/sequelize.js";
 
@@ -33,20 +32,20 @@ const Medicine = sequelize.define(
       allowNull: false,
       defaultValue: 0, // Initial stock is 0
       validate: {
-        min: 0, // Ensure stock is not negative
+        min: 0, // EStock shouldn't be 0
       },
     },
     expiryDate: {
       type: DataTypes.DATE,
-      allowNull: false, // Ensure an expiry date is provided
+      allowNull: false, 
       validate: {
         isDate: true,
-        isAfter: new Date().toString(), // Ensure expiry date is in the future
+        isAfter: new Date().toString(), // Ensure expiry date should be in the future
       },
     },
   },
   {
-    timestamps: true, // Enable createdAt and updatedAt fields
+    timestamps: true,
   }
 );
 
