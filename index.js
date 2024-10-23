@@ -16,6 +16,7 @@ import productManagementRoutes from "./src/routes/productManagementRoutes/produc
 // Web User Routes
 import userAuthRoute from "./src/routes/userRoutes/userAuth.js";
 import userReviewRoute from "./src/routes/reviewManagementRoutes/reviewProduct.js";
+import userOrderRoute from "./src/routes/orderManagementRoute/order.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -68,6 +69,8 @@ app.use("/api/admin/manage-products", productManagementRoutes)
 app.use("/api/user/auth", userAuthRoute);
 // User-Product-Review Routes
 app.use("/api/user/review", userReviewRoute);
+// User-Place Order Routes
+app.use("/api/user", userOrderRoute);
 
 app.listen(port, () => {
     console.log(`App is running on port http://localhost:${port}`);

@@ -5,7 +5,7 @@ import Admin from "../models/adminModel.js";
 
 // Define the Medicine (Product) Model
 const Medicine = sequelize.define(
-  "medicine",
+  "medicines",
   {
     id: {
       type: DataTypes.INTEGER,

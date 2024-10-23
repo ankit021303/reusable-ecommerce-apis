@@ -10,11 +10,9 @@ export const addMedicine = async (req, res) => {
 
     // Check if the user has the role of 'admin' or 'manager'
     if (role !== "admin" && role !== "manager") {
-      return res
-        .status(403)
-        .json({
-          message: "Unauthorized, only admins or managers can add medicine.",
-        });
+      return res.status(403).json({
+        message: "Unauthorized, only admins or managers can add medicine.",
+      });
     }
 
     // Check if a medicine with the same name already exists
@@ -29,7 +27,9 @@ export const addMedicine = async (req, res) => {
     const imagePaths = req.files.map((file) => file.path);
 
     // Ensure categories is an array or empty if not provided
-    const categoriesArray = Array.isArray(categories) ? categories : [categories];
+    const categoriesArray = Array.isArray(categories)
+      ? categories
+      : [categories];
 
     const newMedicine = await Medicine.create({
       name,
@@ -57,7 +57,7 @@ export const addMedicine = async (req, res) => {
 
     // Fetch the categories associated with the medicine
     const medicineWithCategories = await Medicine.findByPk(newMedicine.id, {
-      include: [{ model: Category, as: 'categories' }] 
+      include: [{ model: Category, as: "categories" }],
     });
 
     return res.status(201).json({
@@ -66,10 +66,10 @@ export const addMedicine = async (req, res) => {
     });
   } catch (error) {
     console.error("Error during sign-up:", error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: "Internal server error",
       status: false,
-      code: 500,    
+      code: 500,
     });
   }
 };
@@ -98,10 +98,10 @@ export const getMedicinesByCategory = async (req, res) => {
 
     // If Category is not Found
     if (!category) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         message: "Category not found.",
         status: false,
-        code:404
+        code: 404,
       });
     }
 
@@ -125,7 +125,8 @@ export const getMedicinesByCategory = async (req, res) => {
 export const updateMedicine = async (req, res) => {
   try {
     const { id } = req.params; // Medicine ID from URL parameters
-    const { name, description, price, stockCount, expiryDate, categories } = req.body;
+    const { name, description, price, stockCount, expiryDate, categories } =
+      req.body;
     const { userId, role } = req.user; // Extract userId and role from the decoded token
 
     // Check if the user has the role of 'admin' or 'manager'
@@ -160,7 +161,9 @@ export const updateMedicine = async (req, res) => {
     }
 
     // Ensure categories is an array or empty if not provided
-    const categoriesArray = Array.isArray(categories) ? categories : [categories];
+    const categoriesArray = Array.isArray(categories)
+      ? categories
+      : [categories];
 
     // Find or create categories (categories should be an array of category names)
     if (categoriesArray.length > 0) {
@@ -179,7 +182,7 @@ export const updateMedicine = async (req, res) => {
 
     // Fetch the updated medicine along with its categories
     const updatedMedicineWithCategories = await Medicine.findByPk(medicine.id, {
-      include: [{ model: Category, as: 'categories' }],
+      include: [{ model: Category, as: "categories" }],
     });
 
     return res.status(200).json({
