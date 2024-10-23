@@ -7,9 +7,6 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
 
-// Middlewares
-// import { authenticateJWT } from "./src/middleware/authenticateJWT.js";
-
 // Routes
 // Admin Panel Routes
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
@@ -18,6 +15,7 @@ import productManagementRoutes from "./src/routes/productManagementRoutes/produc
 
 // Web User Routes
 import userAuthRoute from "./src/routes/userRoutes/userAuth.js";
+import userReviewRoute from "./src/routes/reviewManagementRoutes/reviewProduct.js";
 
 // Importing connection.js for developing the connection with the mySQL-DB.
 import connectToDatabase from "./src/config/dbConfig.js";
@@ -68,6 +66,8 @@ app.use("/api/admin/manage-products", productManagementRoutes)
 
 // WEB USER AUTH Routes
 app.use("/api/user/auth", userAuthRoute);
+// User-Product-Review Routes
+app.use("/api/user/review", userReviewRoute);
 
 app.listen(port, () => {
     console.log(`App is running on port http://localhost:${port}`);

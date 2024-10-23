@@ -6,7 +6,7 @@ export const addMedicine = async (req, res) => {
   try {
     const { name, description, price, stockCount, expiryDate, categories } =
       req.body;
-    const { userId, role } = req.user; // Extract userId and role from the decoded token
+    const { userId, role } = req.user;
 
     // Check if the user has the role of 'admin' or 'manager'
     if (role !== "admin" && role !== "manager") {
@@ -51,7 +51,6 @@ export const addMedicine = async (req, res) => {
         return category;
       })
     );
-
 
     // Associate the medicine with the found/created categories
     await newMedicine.addCategories(categoryInstances);

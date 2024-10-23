@@ -20,10 +20,13 @@ const authenticate = (req, res, next, isAdminPanel = false) => {
   try {
     const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
 
+    // Normalize the role to lowercase for consistency
+    const userRole = decodedToken.role?.toLowerCase();
+
     // If isAdminPanel is true, restrict access to admin-related roles
     if (
       isAdminPanel &&
-      !["Admin", "Manager", "Staff", "Distributor"].includes(decodedToken.role)
+      !["admin", "manager", "staff", "distributor"].includes(userRole)
     ) {
       return res.status(403).json({
         error:
