@@ -65,6 +65,9 @@ const User = sequelize.define(
       type: DataTypes.ENUM("user", "admin"),
       allowNull: false,
       defaultValue: "user",
+      validate: {
+        isIn: [["user", "admin"]], // Valid roles
+      },
     },
     isActive: {
       type: DataTypes.INTEGER,
