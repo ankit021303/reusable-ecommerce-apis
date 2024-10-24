@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import authRoute from "./src/routes/adminAuthRoutes/auth.js";
 import adminManagementRoutes from "./src/routes/adminPanelManagementRoute/adminManagement.js";
 import productManagementRoutes from "./src/routes/productManagementRoutes/product.js";
+import couponManagementRoutes from "./src/routes/couponCodeRoutes/couponCodeManagement.js";
 
 // Web User Routes
 import userAuthRoute from "./src/routes/userRoutes/userAuth.js";
@@ -63,7 +64,9 @@ app.use("/api/admin/auth", authRoute );
 // Admin Management Routes
 app.use("/api/admin/members", adminManagementRoutes );
 // Product(i.e. Medicine) Management Routes
-app.use("/api/admin/manage-products", productManagementRoutes)
+app.use("/api/admin/manage-products", productManagementRoutes);
+// Coupon Management Routes
+app.use("/api/admin/manage-coupons", couponManagementRoutes)
 
 // WEB USER AUTH Routes
 app.use("/api/user/auth", userAuthRoute);

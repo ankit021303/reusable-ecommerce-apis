@@ -9,6 +9,7 @@ import "../models/categoryModel.js";
 import "../models/reviewModel.js";
 import "../models/orderModel.js";
 import "../models/orderedProductModel.js";
+import "../models/couponCodeModel.js";
 
 dotenv.config();
 // console.log("Check the Latest Code....");
