@@ -1,9 +1,11 @@
+import { Op } from 'sequelize';
 import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
 import { sequelize } from "../../config/sequelize.js";
 import Order from "../../models/orderModel.js";
 import OrderedProduct from "../../models/orderedProductModel.js";
 import Medicine from "../../models/medicineModel.js";
+import CouponCode from "../../models/couponCodeModel.js";
 
 // Initialize Stripe with the secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -13,7 +15,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const placeOrder = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { shippingAddress, products } = req.body; // products: [{ medicineId, quantity }]
+    const { shippingAddress, products, couponCode } = req.body; // products: [{ medicineId, quantity }]
     const { id: userId } = req.user;
 
     if (!products || products.length === 0) {
@@ -59,6 +61,38 @@ export const placeOrder = async (req, res) => {
       })
     );
 
+    // Validate and apply coupon code if provided
+    let discount = 0; 
+    let coupon = null; 
+
+    if (couponCode) {
+      coupon = await CouponCode.findOne({
+        where: {
+          code: couponCode,
+          isActive: 0, // Ensure the coupon is active
+          expiryDate: {
+            [Op.gt]: new Date(), // Ensure the coupon is not expired
+          },
+        },
+      });
+
+      if (coupon) {
+        discount = (totalAmount * coupon.discountPercentage) / 100;
+
+        // Update the coupon usage count
+        coupon.usedCount += 1;
+        if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
+          coupon.isActive = 1;
+        }
+        await coupon.save({ transaction });
+      } else {
+        return res.status(400).json({ message: "Invalid or expired coupon code." });
+      }
+    }
+
+    // Apply discount to total amount
+    const discountedAmount = totalAmount - discount;
+
     // Generate a unique order number
     const orderNo = `ORD-${uuidv4()}`;
 
@@ -67,10 +101,10 @@ export const placeOrder = async (req, res) => {
       {
         orderNo,
         userId,
-        totalAmount,
+        totalAmount: discountedAmount, 
         shippingAddress,
-        paymentStatus: "pending", // Initially set payment status to 'pending'
-        orderStatus: "pending", // Order status as 'pending'
+        paymentStatus: "pending", 
+        orderStatus: "pending", 
         created_by: userId,
         updated_by: userId,
       },
@@ -82,7 +116,7 @@ export const placeOrder = async (req, res) => {
       throw new Error("No valid products to order.");
     }
 
-    // Create ordered products
+    // Now Create Ordered Products
     const orderedProductRecords = orderedProducts.map((product) => ({
       orderId: newOrder.id,
       medicineId: product.medicineId,
@@ -92,7 +126,7 @@ export const placeOrder = async (req, res) => {
 
     await OrderedProduct.bulkCreate(orderedProductRecords, { transaction });
 
-    // Create Stripe Checkout Session
+    // Create Stripe Checkout Session with discounted amount
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: orderedProducts.map((product) => ({
@@ -101,7 +135,7 @@ export const placeOrder = async (req, res) => {
           product_data: {
             name: `Medicine ID: ${product.medicineId}`,
           },
-          unit_amount: Math.round(product.price * 100), // price in paise
+          unit_amount: Math.round((product.price - (discount ? (product.price * coupon.discountPercentage) / 100 : 0)) * 100), // price in paise
         },
         quantity: product.quantity,
       })),
@@ -121,6 +155,8 @@ export const placeOrder = async (req, res) => {
       message: "Order placed successfully. Please complete the payment.",
       orderId: newOrder.id,
       checkoutUrl: session.url, // Return the checkout session URL
+      discountApplied: discount > 0, 
+      finalAmount: discountedAmount,
     });
   } catch (error) {
     await transaction.rollback();
@@ -168,8 +204,8 @@ export const confirmPayment = async (req, res) => {
 
     // Update the order's payment status to 'completed'
     order.paymentStatus = 'completed';
-    // Set orderStatus to 'shipped' or another valid state as per your logic
-    order.orderStatus = 'shipped'; // Use 'shipped' or any other valid status
+    // Set orderStatus to 'shipped' 
+    order.orderStatus = 'shipped'; 
     await order.save();
 
     // Update the stock count for the ordered medicines
@@ -190,12 +226,15 @@ export const confirmPayment = async (req, res) => {
       message: "Payment confirmed and order updated successfully.",
       paymentIntent: paymentIntent,
       order: order,
+      status: false,
+      code: 200
     });
   } catch (error) {
     console.error("Error confirming payment:", error);
     return res.status(500).json({
       message: "Failed to confirm the payment and update order.",
       status: false,
+      code: 500,
       error: error.message,
     });
   }
