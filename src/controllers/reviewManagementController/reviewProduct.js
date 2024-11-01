@@ -1,4 +1,6 @@
 // import User from "../../models/userModel";
+import OrderedProduct from "../../models/orderedProductModel.js";
+import Order from "../../models/orderModel.js";
 import Review from "../../models/reviewModel.js";
 // import Medicine from "../../models/medicineModel";
 
@@ -6,25 +8,55 @@ import Review from "../../models/reviewModel.js";
 export const addReview = async (req, res) => {
   try {
     const { productId, rating, comment } = req.body;
-    const { id } = req.user;
+    const { id: userId } = req.user;
+
+    // Check whether the user has placed an order fro the product
+    const existingOrederedProduct = await OrderedProduct.findOne({
+      where: {
+        medicineId: productId, //medicineId is the column fro productId
+      },
+      include: [
+        {
+          model: Order,
+          as: "order",
+          where: {
+            userId: userId,
+          },
+          attributes: [],
+        },
+      ],
+    });
+
+    if (!existingOrederedProduct) {
+      return res.status(403).json({
+        message: "You can only review products that you have purchased."
+      });
+    }
+
 
     // Create a new review
     const newReview = await Review.create({
-        userId: id, // Use `id` as userId
+        userId,
         productId,
         rating,
         comment,
-        created_by: id,
-        updated_by: id,
+        created_by: userId,
+        updated_by: userId,
       });
 
     res.status(201).json({
-      message: "Review added successfully!",
       review: newReview,
+      message: "Review added successfully!",
+      status: true,
+      code: 201,
     });
   } catch (error) {
     console.error("Error adding review:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ 
+      message: "Internal server error",
+      status: false,
+      code: 500,
+    });
   }
 };
 

@@ -1,6 +1,8 @@
 import { sequelize } from "../config/sequelize.js";
 import dotenv from 'dotenv';
 
+dotenv.config();
+
 // Create Table on Importing the Models and sync the changes to the Table on running the code.
 import "../models/userModel.js";
 import "../models/adminModel.js";
@@ -11,7 +13,10 @@ import "../models/orderModel.js";
 import "../models/orderedProductModel.js";
 import "../models/couponCodeModel.js";
 
-dotenv.config();
+// Import the Assocuiation function.
+import associateModels from "../models/associateModel.js";
+associateModels();
+
 // console.log("Check the Latest Code....");
 
 // Connecting to the Database

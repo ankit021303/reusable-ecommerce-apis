@@ -43,9 +43,9 @@ const OrderedProduct = sequelize.define(
   }
 );
 
-OrderedProduct.associate = (models) => {
-  OrderedProduct.belongsTo(Order, { foreignKey: "orderId" });
-  OrderedProduct.belongsTo(Medicine, { foreignKey: "medicineId" });
-};
+// OrderedProduct.associate = (models) => {
+//   OrderedProduct.belongsTo(Order, { foreignKey: "orderId" });
+//   OrderedProduct.belongsTo(Medicine, { foreignKey: "medicineId" });
+// };
 
 export default OrderedProduct;

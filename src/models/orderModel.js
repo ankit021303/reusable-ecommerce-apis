@@ -51,17 +51,26 @@ const Order = sequelize.define(
 );
 
 // Set up associations
-Order.associate = () => {
-  Order.belongsTo(User, {
-    foreignKey: "userId",
-    as: "user",
-  });
+// Order.associate = () => {
+//   Order.belongsTo(User, {
+//     foreignKey: "userId",
+//     as: "user",
+//   });
 
-  // Order has many OrderedProducts
-  Order.hasMany(OrderedProduct, {
-    foreignKey: "orderId",
-    as: "products", 
-  });
-};
+//   // Order has many OrderedProducts as products
+//   Order.hasMany(OrderedProduct, {
+//     foreignKey: "orderId",
+//     as: "products", 
+//   });
+// };
+
+// // Order has many OrderedProducts as orderedProducts
+// Order.hasMany(OrderedProduct, {
+//   foreignKey: "orderId",
+//   as: "orderedProducts", 
+// });
+// OrderedProduct.belongsTo(Order, {
+//   foreignKey: "orderId",
+// });
 
 export default Order;
