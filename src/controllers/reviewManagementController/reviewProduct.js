@@ -2,7 +2,7 @@
 import Review from "../../models/reviewModel.js";
 // import Medicine from "../../models/medicineModel";
 
-// Example in reviewController.js (Add Review)
+// To add Review
 export const addReview = async (req, res) => {
   try {
     const { productId, rating, comment } = req.body;
@@ -28,7 +28,7 @@ export const addReview = async (req, res) => {
   }
 };
 
-// Example in reviewController.js (Update Review)
+// To Update Review (Update Review)
 export const updateReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
